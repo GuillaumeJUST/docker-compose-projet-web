@@ -1,0 +1,70 @@
+###############################################################################
+#                          Generated on phpdocker.io                          #
+###############################################################################
+version: "3.1"
+services:
+    memcached:
+      image: memcached:alpine
+      container_name: develop-memcached
+      restart: always
+      networks:
+        my-network:
+          ipv4_address: 10.0.9.21
+
+    redis:
+      image: redis:alpine
+      container_name: develop-redis
+      restart: always
+      networks:
+        my-network:
+          ipv4_address: 10.0.9.22
+
+    mysql:
+      image: mysql:8.0
+      container_name: develop-mysql
+      working_dir: /application
+      restart: always
+      volumes:
+        - .:/application
+        - ./docker/mysql/conf-mysql.cnf:/etc/mysql/mysql.conf.d/conf-mysql.cnf:ro
+      environment:
+        - MYSQL_ROOT_PASSWORD=test
+        - MYSQL_DATABASE=develop
+        - MYSQL_USER=gjust
+        - MYSQL_PASSWORD=test
+      ports:
+        - "1027:3306"
+      networks:
+        my-network:
+          ipv4_address: 10.0.9.23
+
+    webserver:
+      image: httpd:2.4
+      container_name: develop-webserver
+      working_dir: /application
+      volumes:
+          - .:/application
+          - ./docker/apache/httpd.conf:/usr/local/apache2/conf/httpd.conf
+          - ./docker/apache/vhosts/:/usr/local/apache2/conf/vhosts
+      restart: always
+      ports:
+       - "8080:80"
+      networks:
+        my-network:
+          ipv4_address: 10.0.9.24
+
+    php-fpm:
+      build: docker/php-fpm
+      container_name: develop-php-fpm
+      working_dir: /application
+      restart: always
+      volumes:
+        - .:/application
+        - ./docker/php-fpm/php-ini-overrides.ini:/etc/php/7.2/fpm/conf.d/99-overrides.ini
+      networks:
+        my-network:
+          ipv4_address: 10.0.9.25
+
+networks:
+  my-network:
+    external: true
