@@ -43,6 +43,7 @@ services:
       container_name: develop-webserver
       working_dir: /application
       volumes:
+          - ./CHEMIN_DU_PROJET:/usr/local/apache2/htdocs
           - .:/application
           - ./docker/apache/httpd.conf:/usr/local/apache2/conf/httpd.conf
           - ./docker/apache/vhosts/:/usr/local/apache2/conf/vhosts
