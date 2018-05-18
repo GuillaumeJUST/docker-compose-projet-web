@@ -8,6 +8,7 @@ services:
       container_name: develop-memcached
       restart: always
       networks:
+        internal: {}
         my-network:
           ipv4_address: 10.0.9.21
 
@@ -16,6 +17,7 @@ services:
       container_name: develop-redis
       restart: always
       networks:
+        internal: {}
         my-network:
           ipv4_address: 10.0.9.22
 
@@ -35,6 +37,7 @@ services:
       ports:
         - "3306:3306"
       networks:
+        internal: {}
         my-network:
           ipv4_address: 10.0.9.23
 
@@ -55,6 +58,7 @@ services:
       depends_on:
           - php-fpm
       networks:
+        internal: {}
         my-network:
           ipv4_address: 10.0.9.24
 
@@ -74,10 +78,15 @@ services:
         - .:/application
         - ./docker/php-fpm/php-ini-overrides.ini:/etc/php/7.2/fpm/conf.d/99-overrides.ini
       networks:
+        internal: {}
         my-network:
           ipv4_address: 10.0.9.25
 
 networks:
+  internal:
+    driver_opts:
+      internal: "true"
+    driver: bridge
   my-network:
     driver: bridge
     ipam:
