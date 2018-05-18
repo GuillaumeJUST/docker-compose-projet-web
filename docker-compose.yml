@@ -33,7 +33,7 @@ services:
         - MYSQL_USER=gjust
         - MYSQL_PASSWORD=test
       ports:
-        - "1027:3306"
+        - "3306:3306"
       networks:
         my-network:
           ipv4_address: 10.0.9.23
@@ -41,15 +41,15 @@ services:
     webserver:
       image: httpd:2.4
       container_name: develop-webserver
-      working_dir: /application
+      working_dir: /usr/local/apache2/htdocs
       volumes:
-          - ./CHEMIN_DU_PROJET:/usr/local/apache2/htdocs
+          - ./../www:/usr/local/apache2/htdocs
           - .:/application
           - ./docker/apache/httpd.conf:/usr/local/apache2/conf/httpd.conf
           - ./docker/apache/vhosts/:/usr/local/apache2/conf/vhosts
       restart: always
       ports:
-       - "8080:80"
+       - "80:80"
       networks:
         my-network:
           ipv4_address: 10.0.9.24

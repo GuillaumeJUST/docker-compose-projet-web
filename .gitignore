@@ -1,0 +1,6 @@
+
+# IntelliJ project files
+/docker/apache/vhosts/*
+.gitignore
+.idea/
+!/docker/apache/vhosts/000-default.conf
